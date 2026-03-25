@@ -81,11 +81,41 @@ export async function requireSession(request: NextRequest) {
     };
   }
 
+  const deviceSession = await prisma.userDeviceSession.findUnique({
+    where: {
+      userId_deviceId: {
+        userId: user.id,
+        deviceId: session.deviceId,
+      },
+    },
+    select: {
+      revokedAt: true,
+    },
+  });
+
+  if (!deviceSession || deviceSession.revokedAt) {
+    return {
+      session: null,
+      response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
+  }
+
+  await prisma.userDeviceSession.update({
+    where: {
+      userId_deviceId: {
+        userId: user.id,
+        deviceId: session.deviceId,
+      },
+    },
+    data: { lastSeenAt: new Date() },
+  });
+
   return {
     session: {
       userId: user.id,
       username: user.username,
       role: user.role,
+      deviceId: session.deviceId,
     },
     response: null,
   };

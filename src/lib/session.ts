@@ -2,11 +2,13 @@ import type { Role } from "@prisma/client";
 import { jwtVerify, SignJWT } from "jose";
 
 export const SESSION_COOKIE = "azmi_live_tv_session";
+export const DEVICE_COOKIE = "azmi_live_tv_device";
 
 export type SessionPayload = {
   userId: string;
   username: string;
   role: Role;
+  deviceId: string;
 };
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
@@ -35,6 +37,7 @@ export async function verifySessionToken(token: string) {
     userId: String(payload.userId),
     username: String(payload.username),
     role: payload.role as Role,
+    deviceId: String(payload.deviceId),
   } satisfies SessionPayload;
 }
 

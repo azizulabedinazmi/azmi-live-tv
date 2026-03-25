@@ -29,6 +29,7 @@ type UserPayload = {
   username: string;
   role: UserRole;
   isBanned: boolean;
+  maxDevices: number;
   createdAt: string;
 };
 
@@ -41,6 +42,7 @@ export default function AdminPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRole>("USER");
+  const [deviceLimits, setDeviceLimits] = useState<Record<string, number>>({});
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -57,7 +59,14 @@ export default function AdminPage() {
 
     const [statusJson, usersJson] = await Promise.all([statusRes.json(), usersRes.json()]);
     setStatus(statusJson as StatusPayload);
-    setUsers((usersJson as { users: UserPayload[] }).users);
+    const fetchedUsers = (usersJson as { users: UserPayload[] }).users;
+    setUsers(fetchedUsers);
+    setDeviceLimits(
+      fetchedUsers.reduce<Record<string, number>>((acc, user) => {
+        acc[user.id] = user.maxDevices;
+        return acc;
+      }, {}),
+    );
     setLoading(false);
   }, []);
 
@@ -138,6 +147,34 @@ export default function AdminPage() {
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       setError(body.error ?? "Could not delete user");
+      return;
+    }
+
+    await loadData();
+  }
+
+  async function updateDeviceLimit(userId: string) {
+    setError(null);
+
+    const limit = deviceLimits[userId];
+    if (!limit || limit < 1) {
+      setError("Device limit must be at least 1.");
+      return;
+    }
+
+    const res = await fetch("/api/admin/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        action: "set_device_limit",
+        deviceLimit: limit,
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      setError(body.error ?? "Could not update device limit");
       return;
     }
 
@@ -244,9 +281,26 @@ export default function AdminPage() {
                         <Shield size={14} />
                         <span>{user.username}</span>
                         {user.isBanned ? <span className="text-xs text-rose-300">BANNED</span> : null}
+                        <span className="text-xs text-slate-300">Device limit: {user.maxDevices}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="badge">{user.role}</span>
+                        <input
+                          className="input !w-20"
+                          type="number"
+                          min={1}
+                          max={10}
+                          value={deviceLimits[user.id] ?? user.maxDevices}
+                          onChange={(event) =>
+                            setDeviceLimits((current) => ({
+                              ...current,
+                              [user.id]: Number(event.target.value),
+                            }))
+                          }
+                        />
+                        <button className="btn-ghost" onClick={() => updateDeviceLimit(user.id)} type="button">
+                          Save Limit
+                        </button>
                         <button
                           className="btn-ghost"
                           onClick={() => moderateUser(user.id, user.isBanned ? "unban" : "ban")}

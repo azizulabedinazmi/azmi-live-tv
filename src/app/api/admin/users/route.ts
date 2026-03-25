@@ -5,7 +5,8 @@ import { z } from "zod";
 
 const patchSchema = z.object({
   userId: z.string().min(1),
-  action: z.enum(["ban", "unban"]),
+  action: z.enum(["ban", "unban", "set_device_limit"]),
+  deviceLimit: z.coerce.number().int().min(1).max(10).optional(),
 });
 
 const deleteSchema = z.object({
@@ -24,6 +25,7 @@ export async function GET(request: import("next/server").NextRequest) {
       username: true,
       role: true,
       isBanned: true,
+      maxDevices: true,
       createdAt: true,
     },
     orderBy: [{ role: "asc" }, { createdAt: "desc" }],
@@ -46,6 +48,23 @@ export async function PATCH(request: import("next/server").NextRequest) {
 
   if (parsed.data.userId === auth.session.userId && parsed.data.action === "ban") {
     return NextResponse.json({ error: "You cannot ban your own account." }, { status: 400 });
+  }
+
+  if (parsed.data.action === "set_device_limit") {
+    if (!parsed.data.deviceLimit) {
+      return NextResponse.json({ error: "Device limit is required." }, { status: 400 });
+    }
+
+    const updated = await prisma.user.updateMany({
+      where: { id: parsed.data.userId },
+      data: { maxDevices: parsed.data.deviceLimit },
+    });
+
+    if (updated.count === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true });
   }
 
   const updated = await prisma.user.updateMany({
