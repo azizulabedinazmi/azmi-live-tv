@@ -100,10 +100,6 @@ export default function LoginPage() {
                 {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
-
-            <p className="mt-6 text-xs text-slate-400">
-              First admin user is created using ADMIN_BOOTSTRAP_USERNAME and ADMIN_BOOTSTRAP_PASSWORD from your environment.
-            </p>
           </div>
         </div>
       </section>
