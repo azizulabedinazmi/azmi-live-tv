@@ -95,8 +95,8 @@ function trimString(value: unknown): string {
 
 function getRepoConfig(): RepoConfig {
   return {
-    owner: process.env.SYNC_REPO_OWNER ?? "azizulabedinazmi",
-    repo: process.env.SYNC_REPO_NAME ?? "azmi-live-tv",
+    owner: process.env.SYNC_REPO_OWNER ?? "abusaeeidx",
+    repo: process.env.SYNC_REPO_NAME ?? "Mrgify-BDIX-IPTV",
     branch: process.env.SYNC_REPO_BRANCH ?? "main",
   };
 }
