@@ -25,14 +25,14 @@ enum SyncStatus {
 }
 
 model User {
-  id           String     @id @default(cuid())
-  username     String     @unique
+  id           String              @id @default(cuid())
+  username     String              @unique
   passwordHash String
-  role         Role       @default(USER)
-  isBanned     Boolean    @default(false)
-  maxDevices   Int        @default(1)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  role         Role                @default(USER)
+  isBanned     Boolean             @default(false)
+  maxDevices   Int                 @default(1)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   favorites    Favorite[]
   syncLogs     SyncLog[]
   sessions     UserDeviceSession[]
@@ -60,6 +60,7 @@ model Channel {
   groupName String?
   source    String     @default("github")
   isActive  Boolean    @default(true)
+  isVod     Boolean    @default(false) // <-- Added this line here
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   favorites Favorite[]
