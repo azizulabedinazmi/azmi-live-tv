@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/banner.svg" alt="Azmi Live TV banner" width="100%">
+</p>
+
 # Azmi Live TV
 
 A full-stack Next.js IPTV web app with:

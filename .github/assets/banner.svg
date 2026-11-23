@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320">
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#020617"/></linearGradient>
+    <radialGradient id="screen" cx=".5" cy=".5" r=".7"><stop offset="0" stop-color="#1e3a8a"/><stop offset="1" stop-color="#0b1120"/></radialGradient>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="2" fill="#000" fill-opacity=".25"/></pattern>
+    <clipPath id="crt"><rect x="742" y="62" width="336" height="196" rx="26"/></clipPath>
+    <style>
+      .dot{animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{50%{opacity:.2}}
+      .roll{animation:roll 3s linear infinite}@keyframes roll{from{transform:translateY(-40px)}to{transform:translateY(260px)}}
+    </style>
+  </defs>
+  <rect width="1200" height="320" fill="url(#wall)"/>
+  <!-- TV -->
+  <rect x="712" y="36" width="440" height="248" rx="34" fill="#a16207"/>
+  <rect x="720" y="44" width="424" height="232" rx="30" fill="#ca8a04"/>
+  <rect x="742" y="62" width="336" height="196" rx="26" fill="url(#screen)"/>
+  <g clip-path="url(#crt)">
+    <g transform="translate(742 62)">
+      <rect x="0" y="0" width="48" height="196" fill="#e5e7eb" opacity=".85"/><rect x="48" y="0" width="48" height="196" fill="#facc15" opacity=".85"/><rect x="96" y="0" width="48" height="196" fill="#22d3ee" opacity=".85"/><rect x="144" y="0" width="48" height="196" fill="#22c55e" opacity=".85"/><rect x="192" y="0" width="48" height="196" fill="#d946ef" opacity=".85"/><rect x="240" y="0" width="48" height="196" fill="#ef4444" opacity=".85"/><rect x="288" y="0" width="48" height="196" fill="#2563eb" opacity=".85"/>
+      <rect class="roll" x="0" y="0" width="336" height="26" fill="#fff" opacity=".18"/>
+    </g>
+    <rect x="742" y="62" width="336" height="196" fill="url(#scan)"/>
+  </g>
+  <g transform="translate(1110 90)"><circle r="12" fill="#78350f"/><circle cy="40" r="12" fill="#78350f"/><g fill="#78350f"><rect x="-10" y="80" width="20" height="4"/><rect x="-10" y="90" width="20" height="4"/><rect x="-10" y="100" width="20" height="4"/></g></g>
+  <path d="M870 36 820 0M950 36l50-36" stroke="#94a3b8" stroke-width="4"/>
+  <!-- live chip -->
+  <g transform="translate(70 70)">
+    <rect width="116" height="38" rx="19" fill="#dc2626"/>
+    <circle class="dot" cx="24" cy="19" r="8" fill="#fff"/>
+    <text x="44" y="26" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#fff" letter-spacing="3">LIVE</text>
+  </g>
+  <text x="66" y="180" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="72" font-weight="900" fill="#f8fafc">Azmi Live TV</text>
+  <text x="70" y="222" font-family="Consolas, Menlo, monospace" font-size="18" fill="#94a3b8">IPTV web app · HLS playback · favorites · admin sync</text>
+  <g font-family="Consolas, Menlo, monospace" font-size="13" fill="#fde68a">
+    <rect x="70" y="244" width="94" height="26" rx="6" fill="none" stroke="#fde68a"/><text x="117" y="262" text-anchor="middle">Next.js 16</text>
+    <rect x="174" y="244" width="72" height="26" rx="6" fill="none" stroke="#fde68a"/><text x="210" y="262" text-anchor="middle">Prisma</text>
+    <rect x="256" y="244" width="70" height="26" rx="6" fill="none" stroke="#fde68a"/><text x="291" y="262" text-anchor="middle">hls.js</text>
+  </g>
+</svg>
